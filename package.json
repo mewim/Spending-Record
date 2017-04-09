@@ -1,0 +1,27 @@
+{
+  "name": "spending-record",
+  "version": "0.0.1",
+  "description": "CS 242 Final Project",
+  "main": "index.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "author": "Chang Liu",
+  "license": "BSD-2-Clause",
+  "dependencies": {
+    "bcrypt-nodejs": "0.0.3",
+    "body-parser": "^1.17.1",
+    "express": "^4.15.2",
+    "express-fileupload": "^0.1.2",
+    "express-logging": "^1.1.1",
+    "jwt-simple": "^0.5.1",
+    "logops": "^1.0.7",
+    "moment": "^2.18.1",
+    "mongoose": "^4.9.1",
+    "sync-request": "^4.0.1",
+    "xml2js": "^0.4.17"
+  },
+  "engines": {
+    "node": "7.4.0"
+  }
+}
