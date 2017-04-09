@@ -1,7 +1,7 @@
 {
   "name": "spending-record",
   "version": "0.0.1",
-  "description": "CS 242 Final Project",
+  "description": "UIUC CS 242 Final Project Spending Record",
   "main": "index.js",
   "scripts": {
     "start": "node app.js"
