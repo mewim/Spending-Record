@@ -1,7 +1,7 @@
-# SVN-Portfolio
-UIUC CS 242 Spring 2017 Assignment 3 SVN-Portfolio
+# Spending Record
+UIUC CS 242 Spring 2017 Final Project Spending Record
 
-(https://cs242-svn-portfolio.herokuapp.com)
+(https://spending-record.herokuapp.com)
 
 ## Run
 1. Set `MONGODB_URI` environment variable.
