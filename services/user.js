@@ -14,18 +14,20 @@ module.exports = {
      */
     validate_user_info: function (user_info, update) {
         var result = {success: true, messages: []};
-        if (update && (!this.validate_password(user_info.password))) {
-            result.messages.push('The minimum length for your password is 8 characters.')
-        }
         if (!user_info.username) {
             result.messages.push('Please enter your username.');
         }
-        user_info.username = user_info.username.toLowerCase();
-        if (user_info.username.length > 10) {
-            result.messages.push('The maximum length for username is 10 characters.')
+        else {
+            user_info.username = user_info.username.toLowerCase();
+            if (user_info.username.length > 10) {
+                result.messages.push('The maximum length for username is 10 characters.')
+            }
+            if (!(Validator.isAlphanumeric(user_info.username))) {
+                result.messages.push('Your username can contain only alphanumeric characters.')
+            }
         }
-        if (!(Validator.isAlphanumeric(user_info.username))) {
-            result.messages.push('Your username can contain only alphanumeric characters.')
+        if (update && (!this.validate_password(user_info.password))) {
+            result.messages.push('The minimum length for your password is 8 characters.')
         }
         if (!user_info.firstname) {
             result.messages.push('Please enter your first name.');
@@ -44,9 +46,7 @@ module.exports = {
             result.messages.push('Please enter a valid zip code.');
         }
         result.success = result.messages.length == 0;
-        if (result.success) {
-            result.user = user_info;
-        }
+        result.user = user_info;
         return result;
     },
 

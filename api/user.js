@@ -16,16 +16,16 @@ const SERVER_ERROR = {
 router.post('/', function (req, res) {
     var body = req.body;
     var user_validate = UserService.validate_user_info(body, true);
-    if (!user_validate.success) {
-        return res.status(400).send(user_validate);
-    }
-    User.findOne({username: user_validate.user.username}, function (err, exist_user) {
+    User.findOne({username: user_validate.user ? user_validate.user.username : ''}, function (err, exist_user) {
         if (err) {
             return res.status(500).send(SERVER_ERROR);
         }
         if (exist_user) {
             user_validate.success = false;
-            user_validate.message.unshift('The username is taken. Please choose a different one.');
+            user_validate.messages.unshift('The username is taken. Please choose a different one.');
+        }
+        if (!user_validate.success) {
+            return res.status(400).send(user_validate);
         }
         AuthService.encrypt_password(user_validate.user.password, function (encrypted) {
             if (!encrypted) {

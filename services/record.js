@@ -7,8 +7,8 @@ const User = require('../models/user');
 module.exports = {
     /**
      * Encrypt a user password
-     * @param {String} password
-     * @param {Function} callback
+     * @param {Object} record
+     * @return {Object} result
      */
     validate_record: function (record) {
 
