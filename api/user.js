@@ -1,15 +1,11 @@
 /*
- * API index file
+ * API for User
  */
 
 const express = require('express'),
     router = express.Router();
-const body_parser = require('body-parser');
 
-// Set up body_parser
-router.use(body_parser.json({limit: '50mb'}));
-
-// Root endpoint for testing purpose
+// POST handler: for creating a new account
 router.post('/', function (req, res) {
     res.status(200).send({
         success: true,
@@ -17,12 +13,19 @@ router.post('/', function (req, res) {
     });
 });
 
-router.get('/', function (req, res) {
+// PUT handler: for changing user information
+router.put('/', function (req, res) {
     res.status(200).send({
         success: true,
         message: "APIs are up and running."
     });
 });
 
-router.use('/auth', require('./auth'));
+// GET handler: for fetching user information
+router.get('/', function (req, res) {
+    res.status(200).send({
+        success: true,
+        message: "APIs are up and running."
+    });
+});
 module.exports = router;

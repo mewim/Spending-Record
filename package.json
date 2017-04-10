@@ -19,6 +19,7 @@
     "moment": "^2.18.1",
     "mongoose": "^4.9.1",
     "sync-request": "^4.0.1",
+    "validator": "^7.0.0",
     "xml2js": "^0.4.17"
   },
   "engines": {
