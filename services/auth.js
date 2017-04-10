@@ -7,6 +7,18 @@ const bcrypt = require('bcrypt-nodejs');
 const TOKEN_SECRET = process.env.TOKEN_SECRET || 'uzf^s2gDMokPeh*j!Jz9aQ@SED2UntDz';
 const User = require('../models/user');
 
+/**
+ * Compare an entered password with the encrypted password in database
+ * @param {String} entered
+ * @param {String} encrypted
+ * @param {Function} callback
+ */
+const compare_password = function (entered, encrypted, callback) {
+    bcrypt.compare(entered, encrypted, function (err, res) {
+        callback(err ? false : res);
+    });
+};
+
 module.exports = {
     /**
      * Encrypt a user password
@@ -21,18 +33,6 @@ module.exports = {
             else {
                 callback(hash ? hash : null);
             }
-        });
-    },
-
-    /**
-     * Compare an entered password with the encrypted password in database
-     * @param {String} entered
-     * @param {String} encrypted
-     * @param {Function} callback
-     */
-    compare_password: function (entered, encrypted, callback) {
-        bcrypt.compare(entered, encrypted, function (err, res) {
-            callback(err ? false : res);
         });
     },
 
@@ -141,8 +141,8 @@ module.exports = {
                 res.status(401).end();
                 return callback({success: false});
             }
-            this.compare_password(password, user.password, function (result) {
-                if (result) {
+            compare_password(password, user.password, function (result) {
+                if (!result) {
                     res.status(401).end();
                     return callback({success: false});
                 }
