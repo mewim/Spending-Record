@@ -1,5 +1,13 @@
+/*
+ * Handles manipulation for the sign up webpage.
+ */
+
 angular.module('SignUp', []).controller('SignUpController', function ($scope, $http) {
     $scope.message = 'Please enter your information.';
+    /*
+     * Create a user account.
+     * Callback function for submit button.
+     */
     $scope.submit = function () {
          $scope.err_messages = [];
         $scope.message = 'Submitting...';

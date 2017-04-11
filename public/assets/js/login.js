@@ -1,5 +1,12 @@
+/*
+ * Handles manipulation for the login webpage.
+ */
 angular.module('Login', []).controller('LoginController', function ($scope, $http) {
     $scope.message = 'Please login to continue.';
+    /*
+     * Login with username and password.
+     * Callback function for login button.
+     */
     $scope.login = function () {
         $scope.err_messages = [];
         if (!$scope.username || $scope.username.length == 0) {

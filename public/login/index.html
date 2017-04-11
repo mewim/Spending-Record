@@ -44,13 +44,13 @@
                 <!-- panel-body -->
                 <div class="panel-body" ng-controller="LoginController">
                     <fieldset>
-                        <div id="info" ng-hide="show_error">
+                        <div id="info" ng-hide="err_messages.length > 0">
                             <div class="alert alert-info">
                                 <i class="fa fa-info-circle fa-fw"></i> {{message}}
                             </div>
                         </div>
 
-                        <div id="error" ng-show="show_error">
+                        <div id="error" ng-show="err_messages.length > 0">
                             <div class="alert alert-danger">
                                 <div ng-repeat="err in err_messages"><i class="fa fa-exclamation-circle"></i>
                                     {{err}}

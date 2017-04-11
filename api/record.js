@@ -44,14 +44,13 @@ router.post('/', function (req, res) {
 });
 
 // POST handler: for fetching all records for a given user
-router.post('/get_all', function (req, res) {
+router.post('/get_all/', function (req, res) {
     AuthService.auth_token(req, res, function (auth) {
         if (!auth.success) {
             return;
         }
         var body = req.body;
         var user = auth.user;
-        console.log('wfwefwerfw', auth);
         user.populate('_records', function (err, result) {
             if(err){
                 return res.status(500).send(SERVER_ERROR);

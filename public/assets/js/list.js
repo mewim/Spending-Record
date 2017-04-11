@@ -1,3 +1,7 @@
+/*
+ * Handles manipulation for the list webpage.
+ */
+
 // Init global variables
 var records_table = null;
 /**
@@ -12,7 +16,7 @@ const add_record = function (record) {
         location,
         record.amount,
         $('<p>').text(record.category).html(),
-        moment(record.date).format('YYYY-MM-DD HH:mm'),
+        new Date(record.date).toISOString().slice(0, 10)
     ]).draw();
 };
 
