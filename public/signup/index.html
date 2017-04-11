@@ -17,9 +17,8 @@
           href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-material-design/0.5.10/css/ripples.min.css">
     <!-- Font Awesome Icons -->
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
-    <!-- User Javascript and CSS -->
-    <script src="/assets/js/login.js"></script>
-    <link href="/assets/css/background.css" rel="stylesheet">
+    <!-- AngularJS -->
+    <script src="https://code.angularjs.org/1.6.4/angular.min.js"></script>
 </head>
 <body>
 
@@ -32,7 +31,7 @@
 </nav>
 
 <!-- page-wrapper -->
-<div id="page-wrapper" style="margin-top: 100px">
+<div id="page-wrapper" style="margin-top: 100px" ng-app="SignUp">
     <!-- row -->
     <div class="row">
         <!-- container -->
@@ -43,16 +42,25 @@
                     <h3 class="panel-title">Sign Up</h3>
                 </div>
                 <!-- panel-body -->
-                <div class="panel-body">
+                <div class="panel-body" ng-controller="SignUpController">
                     <fieldset>
-                        <div id="info">
+                        <div id="info" ng-hide="err_messages.length > 0">
                             <div class="alert alert-info">
-                                <i class="fa fa-info-circle fa-fw"></i> Please enter your information.
+                                <i class="fa fa-info-circle fa-fw"></i> {{message}}
+                            </div>
+                        </div>
+
+                        <div id="error" ng-show="err_messages.length > 0">
+                            <div class="alert alert-danger">
+                                <div ng-repeat="err in err_messages">
+                                    <i class="fa fa-exclamation-circle"></i>
+                                    {{err}}
+                                </div>
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="username">Username</label>
-                            <input id="username" class="form-control" placeholder="Enter your username" name="username"
+                            <input ng-model="user.username" id="username" class="form-control" placeholder="Enter your username" name="username"
                                    autofocus>
                             <small id="usernameHelp" class="form-text text-muted">Between 1 to 10 characters. Letters
                                 and numbers only.
@@ -61,9 +69,9 @@
 
                         <div class="form-group">
                             <label for="password">Password</label>
-                            <input id="password" class="form-control" type="password" placeholder="Enter your password" name="password"
+                            <input ng-model="user.password" id="password" class="form-control" type="password" placeholder="Enter your password" name="password"
                                    autofocus>
-                            <input id="password_rpt" class="form-control" type="password" placeholder="Repeat your password" name="password_rpt"
+                            <input ng-model="user.password_rpt" id="password_rpt" class="form-control" type="password" placeholder="Confirm your password" name="password_rpt"
                                    autofocus>
                             <small id="passwordHelp" class="form-text text-muted">At least 8 characters.
                             </small>
@@ -71,17 +79,17 @@
 
                         <div class="form-group">
                             <label for="name">Name</label>
-                            <input id="firstName" class="form-control" placeholder="Enter your first name">
-                            <input id="lastName" class="form-control" placeholder="Enter your last name">
+                            <input ng-model="user.firstname" id="firstname" class="form-control" placeholder="Enter your first name">
+                            <input ng-model="user.lastname" id="lastname" class="form-control" placeholder="Enter your last name">
                         </div>
 
                         <div class="form-group">
                             <label for="location">Location</label>
-                            <input id="city" class="form-control" placeholder="Enter your city" name="city">
-                            <input id="state" class="form-control" placeholder="Enter your state/province" name="state">
-                            <input id="zipcode" class="form-control" placeholder="Enter your zip code" name="zipcode">
+                            <input ng-model="user.city" id="city" class="form-control" placeholder="Enter your city" name="city">
+                            <input ng-model="user.state" id="state" class="form-control" placeholder="Enter your state/province" name="state">
+                            <input ng-model="user.zipcode" id="zipcode" class="form-control" placeholder="Enter your zip code" name="zipcode">
                         </div>
-                        <button class="btn btn-lg btn-success btn-block" onclick="submit()">Submit</button>
+                        <button class="btn btn-lg btn-success btn-block" ng-click="submit()">Submit</button>
                     </fieldset>
                 </div>
                 <!-- End panel-body -->
@@ -93,5 +101,8 @@
     <!-- End row -->
 </div>
 <!-- End page-wrapper -->
+<!-- User Javascript and CSS -->
+<script src="/assets/js/signup.js"></script>
+<link href="/assets/css/background.css" rel="stylesheet">
 </body>
 </html>

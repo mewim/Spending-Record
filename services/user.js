@@ -14,6 +14,7 @@ module.exports = {
      */
     validate_user_info: function (user_info, update) {
         var result = {success: true, messages: []};
+        // validate username
         if (!user_info.username) {
             result.messages.push('Please enter your username.');
         }
@@ -26,15 +27,21 @@ module.exports = {
                 result.messages.push('Your username can contain only alphanumeric characters.')
             }
         }
-        if (update && (!this.validate_password(user_info.password))) {
-            result.messages.push('The minimum length for your password is 8 characters.')
+        // validate password
+        if (update) {
+            var password_errors = this.validate_password(user_info.password, user_info.password_rpt);
+            for(var i = 0; i < password_errors.length; ++i){
+                result.messages.push(password_errors[i]);
+            }
         }
+        // validate first and last name
         if (!user_info.firstname) {
             result.messages.push('Please enter your first name.');
         }
         if (!user_info.lastname) {
             result.messages.push('Please enter your last name.');
         }
+        // validate location
         if (!user_info.state) {
             result.messages.push('Please enter your state.');
         }
@@ -53,9 +60,17 @@ module.exports = {
     /**
      * Validate the password of a user
      * @param {String} password
-     * @return {Boolean} result
+     * @param {String} password_rpt - repeated password
+     * @return [String] result
      */
-    validate_password: function (password) {
-        return password && password.length >= 8;
+    validate_password: function (password, password_rpt) {
+        var errors = [];
+        if(!password || password.length < 8){
+            errors.push('The minimum length for your password is 8 characters.');
+        }
+        if(password!=password_rpt){
+            errors.push('Your password and confirmation password do not match.');
+        }
+        return errors;
     }
 };

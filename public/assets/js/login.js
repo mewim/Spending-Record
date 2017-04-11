@@ -36,7 +36,7 @@ angular.module('Login', []).controller('LoginController', function ($scope, $htt
                     $scope.err_messages = ["Please check your username and password."];
                 }
                 else {
-                    $scope.errormsg = ["Sorry. Bad connection. Please try again."];
+                    $scope.err_messages = ["Sorry. Bad connection. Please try again."];
                 }
             });
     };
