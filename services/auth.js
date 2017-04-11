@@ -108,7 +108,7 @@ module.exports = {
             return callback({success: false});
         }
         User.findOne({_id: token_validate.user_id}, function (error, user) {
-            if (error) {
+            if (error || !user) {
                 res.status(401).end();
                 return callback({success: false});
             }

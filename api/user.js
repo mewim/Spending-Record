@@ -7,9 +7,10 @@ const express = require('express'),
 const User = require('../models/user');
 const UserService = require('../services/user');
 const AuthService = require('../services/auth');
+const DEFAULT_CATEGORIES = ['Food', 'Clothing', 'Grocery', 'Rent', 'Travel', 'Education', 'Entertainment', 'Health'];
 const SERVER_ERROR = {
     success: false,
-    message: ['There is a server error. Please try again later.']
+    messages: ['There is a server error. Please try again later.']
 };
 
 // POST handler: for creating a new account
@@ -25,6 +26,7 @@ router.post('/', function (req, res) {
             user_validate.messages.unshift('The username is taken. Please choose a different one.');
         }
         if (!user_validate.success) {
+            delete user_validate.user;
             return res.status(400).send(user_validate);
         }
         AuthService.encrypt_password(user_validate.user.password, function (encrypted) {
@@ -32,6 +34,7 @@ router.post('/', function (req, res) {
                 return res.status(500).send(SERVER_ERROR);
             }
             user_validate.user.password = encrypted;
+            user_validate.user.categories = DEFAULT_CATEGORIES;
             User.create(user_validate.user, function (err1, new_user) {
                 if (err1) {
                     return res.status(500).send(SERVER_ERROR);
@@ -51,60 +54,62 @@ router.post('/', function (req, res) {
 // PUT handler: for changing user information
 router.put('/', function (req, res) {
     AuthService.auth_token(req, res, function (auth) {
-        if (auth.success) {
-            var body = req.body;
-            if (body.password) {
-                if (!UserService.validate_password(body.password)) {
-                    return res.status(400).send({
-                        success: false,
-                        message: 'The minimum length for your password is 8 characters.'
-                    });
-                }
-                return AuthService.encrypt_password(body.password, function (encrypted) {
-                    if (!encrypted) {
-                        return res.status(500).send(SERVER_ERROR);
-                    }
-                    auth.user.password = encrypted;
-                    auth.user.save(function (err) {
-                        if (err) {
-                            return res.status(500).send(SERVER_ERROR);
-                        }
-                        return res.status(200).send({success: true});
-                    });
+        if (!auth.success) {
+            return;
+        }
+        var body = req.body;
+        if (body.password) {
+            if (!UserService.validate_password(body.password)) {
+                return res.status(400).send({
+                    success: false,
+                    messages: ['The minimum length for your password is 8 characters.']
                 });
             }
-            var user_validate = UserService.validate_user_info(req.body);
-            if (!user_validate.success) {
-                return res.status(400).send(user_validate)
-            }
-            for (var field in user_validate.user) {
-                auth.user[field] = user_validate.user[field];
-            }
-            auth.user.save(function (err) {
-                if (err) {
+            return AuthService.encrypt_password(body.password, function (encrypted) {
+                if (!encrypted) {
                     return res.status(500).send(SERVER_ERROR);
                 }
-                return res.status(200).send({success: true});
+                auth.user.password = encrypted;
+                auth.user.save(function (err) {
+                    if (err) {
+                        return res.status(500).send(SERVER_ERROR);
+                    }
+                    return res.status(200).send({success: true});
+                });
             });
         }
+        var user_validate = UserService.validate_user_info(req.body);
+        if (!user_validate.success) {
+            return res.status(400).send(user_validate)
+        }
+        for (var field in user_validate.user) {
+            auth.user[field] = user_validate.user[field];
+        }
+        auth.user.save(function (err) {
+            if (err) {
+                return res.status(500).send(SERVER_ERROR);
+            }
+            return res.status(200).send({success: true});
+        });
     });
 });
 
 // POST handler: for fetching user information
 router.post('/get', function (req, res) {
     AuthService.auth_token(req, res, function (auth) {
-        if (auth.success) {
-            var user = auth.user;
-            return res.status(200).send({
-                _id: user._id,
-                username: user.username,
-                firstname: user.firstname,
-                lastname: user.lastname,
-                state: user.state,
-                city: user.city,
-                zipcode: user.zipcode
-            });
+        if (!auth.success) {
+            return;
         }
+        var user = auth.user;
+        return res.status(200).send({
+            _id: user._id,
+            username: user.username,
+            firstname: user.firstname,
+            lastname: user.lastname,
+            state: user.state,
+            city: user.city,
+            zipcode: user.zipcode
+        });
     });
 });
 module.exports = router;

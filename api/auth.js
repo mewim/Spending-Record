@@ -13,7 +13,8 @@ router.post('/', function (req, res) {
         return AuthService.auth_token(req, res, function (result) {
             if (result.success) {
                 return res.status(200).send({
-                    success: true
+                    success: true,
+                    token: AuthService.gen_token(result.user._id, req.ip)
                 });
             }
         });

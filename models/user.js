@@ -16,7 +16,7 @@ var user = new Schema({
     categories: [{
         type: String
     }],
-    records: [{
+    _records: [{
         type: Schema.ObjectId,
         ref: 'Record'
     }]
