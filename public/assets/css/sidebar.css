@@ -1,0 +1,11 @@
+div.sidebar {
+    height: 100%;
+    overflow: hidden;
+}
+
+@media (max-width: 768px) {
+  div.sidebar {
+    height: auto;
+    overflow: auto;
+  }
+}
