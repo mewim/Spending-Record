@@ -22,7 +22,7 @@ router.post('/', function (req, res) {
     AuthService.auth_password(req, res, function (result) {
         if (result.success) {
             return res.status(200).send({
-                sucess: true,
+                success: true,
                 token: AuthService.gen_token(result.user._id, req.ip)
             });
         }

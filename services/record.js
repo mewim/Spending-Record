@@ -2,8 +2,6 @@
  * Record Model Service Handler
  */
 
-const User = require('../models/user');
-
 module.exports = {
     /**
      * Validate a record is correct or not

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Please Sign In</title>
+    <!-- Material Design fonts -->
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Roboto:300,400,500,700">
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/icon?family=Material+Icons">
+    <!-- Bootstrap 3 -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <!-- Bootstrap Material Design -->
+    <link rel="stylesheet" type="text/css"
+          href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-material-design/0.5.10/css/bootstrap-material-design.css">
+    <link rel="stylesheet" type="text/css"
+          href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-material-design/0.5.10/css/ripples.min.css">
+    <!-- Font Awesome Icons -->
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <!-- User Javascript and CSS -->
+    <script src="/assets/js/login.js"></script>
+    <link href="/assets/css/background.css" rel="stylesheet">
+</head>
+<body>
+
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <!-- Header -->
+    <div class="navbar-header">
+        <a class="navbar-brand" href="/" style=" height: 50px; padding: 10px 15px;">Spending Record</a>
+    </div>
+    <!-- End Header -->
+</nav>
+
+<!-- page-wrapper -->
+<div id="page-wrapper" style="margin-top: 100px">
+    <!-- row -->
+    <div class="row">
+        <!-- container -->
+        <div class="container" align="center">
+            <!-- panel -->
+            <div class="panel panel-default" align="left" style="max-width: 500px;">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Sign Up</h3>
+                </div>
+                <!-- panel-body -->
+                <div class="panel-body">
+                    <fieldset>
+                        <div id="info">
+                            <div class="alert alert-info">
+                                <i class="fa fa-info-circle fa-fw"></i> Please enter your information.
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="username">Username</label>
+                            <input id="username" class="form-control" placeholder="Enter your username" name="username"
+                                   autofocus>
+                            <small id="usernameHelp" class="form-text text-muted">Between 1 to 10 characters. Letters
+                                and numbers only.
+                            </small>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <input id="password" class="form-control" type="password" placeholder="Enter your password" name="password"
+                                   autofocus>
+                            <input id="password_rpt" class="form-control" type="password" placeholder="Repeat your password" name="password_rpt"
+                                   autofocus>
+                            <small id="passwordHelp" class="form-text text-muted">At least 8 characters.
+                            </small>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="name">Name</label>
+                            <input id="firstName" class="form-control" placeholder="Enter your first name">
+                            <input id="lastName" class="form-control" placeholder="Enter your last name">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="location">Location</label>
+                            <input id="city" class="form-control" placeholder="Enter your city" name="city">
+                            <input id="state" class="form-control" placeholder="Enter your state/province" name="state">
+                            <input id="zipcode" class="form-control" placeholder="Enter your zip code" name="zipcode">
+                        </div>
+                        <button class="btn btn-lg btn-success btn-block" onclick="submit()">Submit</button>
+                    </fieldset>
+                </div>
+                <!-- End panel-body -->
+            </div>
+            <!-- End panel -->
+        </div>
+        <!-- End container -->
+    </div>
+    <!-- End row -->
+</div>
+<!-- End page-wrapper -->
+</body>
+</html>
