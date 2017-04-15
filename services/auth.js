@@ -102,7 +102,7 @@ module.exports = {
         }
         var body = req.body,
             token = body.token;
-        var token_validate = this.test_token(token, req.ip);
+        var token_validate = this.test_token(token, req.clientIp);
         if (!token_validate.success) {
             res.status(401).end();
             return callback({success: false});

@@ -14,7 +14,7 @@ router.post('/', function (req, res) {
             if (result.success) {
                 return res.status(200).send({
                     success: true,
-                    token: AuthService.gen_token(result.user._id, req.ip)
+                    token: AuthService.gen_token(result.user._id, req.clientIp)
                 });
             }
         });
@@ -23,7 +23,7 @@ router.post('/', function (req, res) {
         if (result.success) {
             return res.status(200).send({
                 success: true,
-                token: AuthService.gen_token(result.user._id, req.ip)
+                token: AuthService.gen_token(result.user._id, req.clientIp)
             });
         }
     });

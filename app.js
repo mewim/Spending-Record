@@ -3,6 +3,9 @@ const mongoose = require('mongoose');
 const expresslogging = require('express-logging');
 const logger = require('logops');
 const uri = process.env.MONGODB_URI || 'mongodb://heroku_j25q3znw:sukd9gm6006olagfjsdpc3ss0m@ds155820.mlab.com:55820/heroku_j25q3znw';
+const requestIp = require('request-ip');
+
+logger.format = logger.formatters.dev;
 
 // Setup listeners for database connection
 mongoose.connection.on('open', function (ref) {
@@ -23,7 +26,10 @@ const start_server = function () {
 
     app.set('port', (process.env.PORT || 5000));
 
+    // Set up middleware
     app.use(expresslogging(logger));
+
+    app.use(requestIp.mw());
 
     // Serve static assets from the /public folder
     app.use(express.static('public'));

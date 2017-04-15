@@ -52,10 +52,40 @@ router.post('/get_all/', function (req, res) {
         var body = req.body;
         var user = auth.user;
         user.populate('_records', function (err, result) {
-            if(err){
+            if (err) {
                 return res.status(500).send(SERVER_ERROR);
             }
             return res.status(200).send(result._records);
+        });
+    });
+});
+
+// DELETE handler: for deleting one record
+router.delete('/:record_id', function (req, res) {
+    AuthService.auth_token(req, res, function (auth) {
+        if (!auth.success) {
+            return;
+        }
+        var user = auth.user;
+        var record_id = req.params.record_id;
+        try {
+            user._records.pull(record_id);
+        }
+        catch (err) {
+            return res.status(400).send({
+                success: false
+            });
+        }
+        user.save(function (err) {
+            if (err) {
+                return res.status(501).send({
+                    success: false
+                });
+            }
+            Record.findOneAndRemove({_id: record_id});
+            return res.status(200).send({
+                success: true
+            });
         });
     });
 });

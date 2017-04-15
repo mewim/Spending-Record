@@ -17,12 +17,14 @@
           href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-material-design/0.5.10/css/ripples.min.css">
     <!-- Font Awesome Icons -->
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
-    <!-- SB Admin 2 -->
-    <link href="/assets/css/panels.css" rel="stylesheet">
+    <!-- AngularJS -->
+    <script src="https://code.angularjs.org/1.6.4/angular.min.js"></script>
+    <!-- User Javascript and CSS -->
+    <link href="/assets/css/background.css" rel="stylesheet">
+    <link href="/assets/css/sidebar.css" rel="stylesheet">
 </head>
-<body style="height: 100%">
 
-
+<body ng-app="">
 <nav class="navbar navbar-inverse navbar-fixed-top">
     <!-- Header -->
     <div class="navbar-header">
@@ -30,37 +32,16 @@
     </div>
     <!-- End Header -->
 </nav>
-
-
-<!-- page-wrapper -->
-<!-- row -->
-<div class="row" style="height: calc(100%); padding-top: 50px; overflow: hidden;">
-    <div class="col-sm-3 col-md-2 panel panel-default sidebar">
-        <div class="panel-body">
-            <ul class="nav nav-sidebar">
-                <li><a href="/home"><i class="fa fa-home"></i> Home </a></li>
-                <li><a href="/record"><i class="fa fa-pencil-square-o"></i> Record </a></li>
-                <li><a href="/list"><i class="fa fa-list"></i> List </a></li>
-                <li><a href="#"><i class="fa fa-download"></i> Export </a></li>
-                <li><a href="#"><i class="fa fa-line-chart"></i> Statistics </a></li>
-                <hr>
-                <li><a href="#"><i class="fa fa-wrench"></i> Settings </a></li>
-                <li><a href="/signout"><i class="fa fa-sign-out"></i> Sign Out </a></li>
-            </ul>
-        </div>
-    </div>
-
-
-    <div class="col-sm-9 col-md-10">
+<!-- container-fluid -->
+<div class="container-fluid" style="padding-top: 50px;">
+<div class="col-sm-3 col-md-2 panel panel-default sidebar" ng-include="'/_include/sidebar.html'">
+</div>
+    <div class="col-sm-9 col-md-10 pull-right">
         <div class="col-lg-12" style="padding-top: 30px;" id="content-wrapper">
             <h1 style="font-size: 80pt; color: white"> Welcome!</h1>
         </div>
     </div>
 </div>
-<!-- End row -->
-<!-- End page-wrapper -->
-<!-- User Javascript and CSS -->
-<link href="/assets/css/background.css" rel="stylesheet">
-<link href="/assets/css/sidebar.css" rel="stylesheet">
+<!-- End container-fluid -->
 </body>
 </html>

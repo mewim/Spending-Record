@@ -1,10 +1,18 @@
 div.sidebar {
-    height: 100%;
-    overflow: hidden;
+    position: fixed;
+    top: 50px;
+    bottom: -20px;
+    margin-left: -20px;
+    overflow-x: hidden;
+    overflow-y: scroll;
 }
 
 @media (max-width: 768px) {
   div.sidebar {
+    margin-left: -20px;
+    margin-right: -20px;
+    position: relative;
+    top: 0px;
     height: auto;
     overflow: auto;
   }
