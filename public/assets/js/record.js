@@ -1,24 +1,35 @@
 /*
  * Handles manipulation for the record webpage.
  */
-angular.module('Record', []).controller('RecordController', function ($scope, $http) { 
+angular.module('Record', ['google.places']).controller('RecordController', function ($scope, $http) {
+    $scope.autocompleteOptions = {
+
+        types: ['establishment']
+    }
     /*
      * Submit a record to server.
      * Callback function for submit button.
      */
     $scope.submit = function () {
         $scope.err_messages = [];
-        $scope.record.token = localStorage.getItem("token"); 
         $scope.message = 'Submitting...';
+
         var req = {
             method: 'POST',
             url: '/api/record/',
-            data: $scope.record
+            data: {
+                category: $scope.record.category,
+                date: $scope.record.date,
+                amount: $scope.record.amount,
+                description: $scope.record.description,
+                token: localStorage.getItem("token"),
+                location: $scope.record.location ? $scope.record.location.name : null
+            }
         };
         $http(req).then(
             function (res) {
                 // success callback
-                if(res.data.success){
+                if (res.data.success) {
                     $scope.message = 'Your record is submitted to the server.';
                 }
             },
@@ -40,12 +51,12 @@ angular.module('Record', []).controller('RecordController', function ($scope, $h
      * Reset form.
      * Callback function for reset button.
      */
-     $scope.reset = function () {
+    $scope.reset = function () {
         $scope.err_messages = [];
         $scope.message = 'Please enter your record.';
         $scope.record = {
             category: '0',
-            date: new Date().toISOString().slice(0, 10) 
+            date: new Date().toISOString().slice(0, 10)
         };
     };
     $scope.reset();
