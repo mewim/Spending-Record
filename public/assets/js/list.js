@@ -5,7 +5,7 @@
 // Init global variables
 const RM_BUTTON_TEMPLATE = '<div style="text-align: center; cursor: pointer;">'
     + '  <i class="fa fa-lg fa-times remove" aria-hidden="true"></i>'
-    + '</div>'
+    + '</div>';
 var records_table = null;
 
 /**

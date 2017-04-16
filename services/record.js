@@ -24,7 +24,7 @@ module.exports = {
         }
         if (record.date) {
             record.date = new Date(record.date);
-            if (!record.date) {
+            if (!record.date.getTime()) {
                 result.messages.push('Please enter a valid date.');
             }
         }

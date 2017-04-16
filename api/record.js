@@ -60,6 +60,53 @@ router.post('/get_all/', function (req, res) {
     });
 });
 
+// POST handler: for fetching records given a period for a given user
+router.post('/get_range/', function (req, res) {
+    AuthService.auth_token(req, res, function (auth) {
+        if (!auth.success) {
+            return;
+        }
+        var user = auth.user;
+        var start = req.body.start ? new Date(req.body.start) : null;
+        var end = req.body.end ? new Date(req.body.end) : null;
+        var err_messages = [];
+        if (!start || !start.getTime()) {
+            err_messages.push('Please enter a valid start date.');
+        }
+        if (!end || !end.getTime()) {
+            err_messages.push('Please enter a valid end date.');
+        }
+        if (err_messages.length == 0 && end < start) {
+            err_messages.push('The end date is earlier than the start date.');
+        }
+        if (err_messages.length > 0) {
+            return res.status(400).send(
+                {
+                    success: false,
+                    messages: err_messages
+                });
+        }
+        var populate_condition = {
+            path: '_records',
+            match: {
+                date: {
+                    $gte: start,
+                    $lte: end
+                }
+            }
+        };
+        user.populate(populate_condition, function (err, result) {
+            if (err) {
+                return res.status(500).send(SERVER_ERROR);
+            }
+            return res.status(200).send({
+                success: true,
+                records: result._records
+            });
+        });
+    });
+});
+
 // DELETE handler: for deleting one record
 router.delete('/:record_id', function (req, res) {
     AuthService.auth_token(req, res, function (auth) {
