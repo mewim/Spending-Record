@@ -28,6 +28,7 @@ module.exports = {
                 result.messages.push('Please enter a valid date.');
             }
         }
+        record.location = record.location ? record.location : null;
         result.success = result.messages.length === 0;
         if (result.success) {
             result.record = record;
