@@ -27,5 +27,6 @@ router.get('/', function (req, res) {
 router.use('/auth', require('./auth'));
 router.use('/user', require('./user'));
 router.use('/record', require('./record'));
+router.use('/category', require('./category'));
 
 module.exports = router;

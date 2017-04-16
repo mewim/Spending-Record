@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en" style="height: 100%">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings</title>
+    <!-- Material Design fonts -->
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Roboto:300,400,500,700">
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/icon?family=Material+Icons">
+    <!-- AngularJS -->
+    <script src="https://code.angularjs.org/1.6.4/angular.min.js"></script>
+    <script src="https://code.angularjs.org/1.6.4/angular-animate.min.js"></script>
+    <script src="https://code.angularjs.org/1.6.4/angular-touch.min.js"></script>
+
+    <!-- Bootstrap 3 -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/2.5.0/ui-bootstrap-tpls.min.js"></script>
+
+    <!-- Bootstrap Material Design -->
+    <link rel="stylesheet" type="text/css"
+          href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-material-design/0.5.10/css/bootstrap-material-design.css">
+    <link rel="stylesheet" type="text/css"
+          href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-material-design/0.5.10/css/ripples.min.css">
+    <!-- Font Awesome Icons -->
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <!-- User Javascript and CSS -->
+    <link href="/assets/css/background.css" rel="stylesheet">
+    <link href="/assets/css/sidebar.css" rel="stylesheet">
+    <script src="/assets/js/settings.js"></script>
+</head>
+
+<body ng-app="Settings">
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <!-- Header -->
+    <div class="navbar-header">
+        <a class="navbar-brand" href="/" style=" height: 50px; padding: 10px 15px;">Spending Record</a>
+    </div>
+    <!-- End Header -->
+</nav>
+
+<!-- container-fluid -->
+<div class="container-fluid" style="padding-top: 50px;">
+    <div class="col-sm-3 col-md-2 panel panel-default sidebar" ng-include="'/_include/sidebar.html'"></div>
+    <div class="col-sm-9 col-md-10 pull-right" id="pull-right-wrapper">
+        <!-- content-wrapper -->
+        <div class="col-lg-12" style="padding-top: 30px;" id="content-wrapper">
+            <!-- User Information panel -->
+            <div class="panel panel-default" ng-controller="UserInfoController">
+                <div class="panel-heading">
+                    <i class="fa fa-user"></i> User Information
+                </div>
+                <div class="panel-body">
+                    <div id="info" ng-hide="err_messages.length > 0">
+                        <div class="alert alert-info">
+                            <i class="fa fa-info-circle fa-fw"></i> {{message}}
+                        </div>
+                    </div>
+
+                    <div id="error" ng-show="err_messages.length > 0">
+                        <div class="alert alert-danger">
+                            <div ng-repeat="err in err_messages">
+                                <i class="fa fa-exclamation-circle"></i>
+                                {{err}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="username">Username</label>
+                            <input ng-model="user.username" id="username" class="form-control"
+                                   placeholder="Enter your username" name="username"
+                                   autofocus>
+                            <small id="usernameHelp" class="form-text text-muted">Between 1 to 10 characters. Letters
+                                and numbers only.
+                            </small>
+                        </div>
+                        <div class="form-group">
+                            <label for="name">Name</label>
+                            <input ng-model="user.firstname" id="firstname" class="form-control"
+                                   placeholder="Enter your first name">
+                            <input ng-model="user.lastname" id="lastname" class="form-control"
+                                   placeholder="Enter your last name">
+                        </div>
+
+
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="location">Location</label>
+                            <input ng-model="user.city" id="city" class="form-control" placeholder="Enter your city"
+                                   name="city">
+                            <input ng-model="user.state" id="state" class="form-control"
+                                   placeholder="Enter your state/province" name="state">
+                            <input ng-model="user.zipcode" id="zipcode" class="form-control"
+                                   placeholder="Enter your zip code" name="zipcode">
+                        </div>
+
+                    </div>
+                    <div class="col-lg-12">
+                        <button type="button" class="btn btn-success" ng-click="submit()">Submit</button>
+                        <button type="button" class="btn btn-danger" ng-click="reset()">Reset Form</button>
+                    </div>
+                </div>
+            </div>
+            <!-- End User Information panel -->
+            
+            <!-- Password panel -->
+            <div class="panel panel-default" ng-controller="PasswordController">
+                <div class="panel-heading">
+                    <i class="fa fa-key"></i> Password
+                </div>
+                <div class="panel-body">
+                    <div ng-hide="password != password_rpt || (password.length > 0 && password.length < 8) || err_messages.length > 0">
+                        <div class="alert alert-info">
+                            <i class="fa fa-info-circle fa-fw"></i> {{message}}
+                        </div>
+                    </div>
+
+                    <div ng-show="password != password_rpt || (password.length > 0 && password.length < 8) || err_messages.length > 0">
+                        <div class="alert alert-danger">
+                            <div ng-show="password.length > 0 &&  password.length < 8">
+                                <i class="fa fa-exclamation-circle"></i> The minimum length for your password is 8
+                                characters.
+                            </div>
+                            <div ng-show="password != password_rpt">
+                                <i class="fa fa-exclamation-circle"></i> Your password and confirmation password do not
+                                match.
+                            </div>
+                            <div ng-repeat="err in err_messages">
+                                <i class="fa fa-exclamation-circle"></i>
+                                {{err}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <input ng-model="password" id="password" class="form-control" type="password"
+                                   placeholder="Enter your password" name="password" autofocus="">
+                            <input ng-model="password_rpt" id="password_rpt" class="form-control" type="password"
+                                   placeholder="Confirm your password" name="password_rpt" autofocus="">
+                            <small id="passwordHelp" class="form-text text-muted">At least 8 characters.
+                            </small>
+                        </div>
+                    </div>
+                    <div class="col-lg-12">
+                        <button type="button" class="btn btn-success" ng-click="submit()">Submit</button>
+                        <button type="button" class="btn btn-danger" ng-click="reset()">Reset Form</button>
+                    </div>
+                </div>
+            </div>
+            <!-- End Password panel -->
+
+            <!-- Categories panel -->
+            <div class="panel panel-default" ng-controller="CategoryController">
+                <div class="panel-heading">
+                    <i class="fa fa-list-alt"></i> Categories
+                </div>
+                <div class="panel-body">
+                    <div class="col-lg-6">
+                        <table class="table table-hover table-bordered">
+                            <tbody>
+                            <tr>
+                                <td class="col-md-6"><input ng-model="new_category" type="text"
+                                                            class="form-control input-sm"
+                                                            style="height:24px"></td>
+                                <td class="col-md-2" style="vertical-align: middle;">
+                                    <div style="text-align: center; cursor: pointer;">
+                                        <i ng-click="add()" class="fa fa-lg fa-save" aria-hidden="true"></i>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr ng-repeat="category in categories">
+                                <td class="col-md-6">{{category}}</td>
+                                <td class="col-md-2">
+                                    <div style="text-align: center; cursor: pointer;">
+                                        <i ng-click="delete($index)" class="fa fa-lg fa-times"
+                                           aria-hidden="true"></i>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <!-- End Categories panel -->
+            </div>
+            <!-- End content-wrapper -->
+        </div>
+    </div>
+    <!-- End container-fluid -->
+</body>
+</html>

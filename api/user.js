@@ -59,10 +59,11 @@ router.put('/', function (req, res) {
         }
         var body = req.body;
         if (body.password) {
-            if (!UserService.validate_password(body.password)) {
+            var password_validate = UserService.validate_password(body.password, body.password);
+            if (password_validate.length > 0) {
                 return res.status(400).send({
                     success: false,
-                    messages: ['The minimum length for your password is 8 characters.']
+                    messages: password_validate
                 });
             }
             return AuthService.encrypt_password(body.password, function (encrypted) {
@@ -78,18 +79,29 @@ router.put('/', function (req, res) {
                 });
             });
         }
+
         var user_validate = UserService.validate_user_info(req.body);
-        if (!user_validate.success) {
-            return res.status(400).send(user_validate)
-        }
-        for (var field in user_validate.user) {
-            auth.user[field] = user_validate.user[field];
-        }
-        auth.user.save(function (err) {
+        User.findOne({username: user_validate.user ? user_validate.user.username : ''}, function (err, exist_user) {
             if (err) {
                 return res.status(500).send(SERVER_ERROR);
             }
-            return res.status(200).send({success: true});
+            if (exist_user && exist_user.username != auth.user.username) {
+                user_validate.success = false;
+                user_validate.messages.unshift('The username is taken. Please choose a different one.');
+            }
+            if (!user_validate.success) {
+                delete user_validate.user;
+                return res.status(400).send(user_validate);
+            }
+            for (var field in user_validate.user) {
+                auth.user[field] = user_validate.user[field];
+            }
+            auth.user.save(function (err) {
+                if (err) {
+                    return res.status(500).send(SERVER_ERROR);
+                }
+                return res.status(200).send({success: true});
+            });
         });
     });
 });

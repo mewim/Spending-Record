@@ -8,12 +8,16 @@ div.sidebar {
 }
 
 @media (max-width: 768px) {
-  div.sidebar {
-    margin-left: -20px;
-    margin-right: -20px;
-    position: relative;
-    top: 0px;
-    height: auto;
-    overflow: auto;
-  }
+    div.sidebar {
+        margin-left: -20px;
+        margin-right: -20px;
+        position: relative;
+        top: 0px;
+        height: auto;
+        overflow: auto;
+    }
+
+    #pull-right-wrapper {
+        float: none !important;
+    }
 }

@@ -14,7 +14,8 @@ var user = new Schema({
     city: {type: String, required: true},
     zipcode: {type: Number, required: true},
     categories: [{
-        type: String
+        type: String,
+        unique: true
     }],
     _records: [{
         type: Schema.ObjectId,

@@ -30,7 +30,7 @@ module.exports = {
         // validate password
         if (update) {
             var password_errors = this.validate_password(user_info.password, user_info.password_rpt);
-            for(var i = 0; i < password_errors.length; ++i){
+            for (var i = 0; i < password_errors.length; ++i) {
                 result.messages.push(password_errors[i]);
             }
         }
@@ -65,10 +65,10 @@ module.exports = {
      */
     validate_password: function (password, password_rpt) {
         var errors = [];
-        if(!password || password.length < 8){
+        if (!password || password.length < 8) {
             errors.push('The minimum length for your password is 8 characters.');
         }
-        if(password!=password_rpt){
+        if (password != password_rpt) {
             errors.push('Your password and confirmation password do not match.');
         }
         return errors;
