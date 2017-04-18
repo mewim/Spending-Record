@@ -21,7 +21,7 @@ const add_record = function (record) {
         $('<p>').text(record.category).html(),
         new Date(record.date).toISOString().slice(0, 10),
         record._id
-    ]).draw();
+    ]).draw(false);
 };
 
 /**
@@ -38,7 +38,7 @@ const remove_record = function (_id, row) {
         }),
         contentType: "application/json; charset=utf-8",
         success: function (data) {
-            row.remove().draw();
+            row.remove().draw(false);
         },
         error: function (xhr, status, error) {
             if (xhr.status == 401) {
