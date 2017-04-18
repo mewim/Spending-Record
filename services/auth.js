@@ -97,12 +97,12 @@ module.exports = {
      * @param {Function} callback
      */
     auth_token: function (req, res, callback) {
-        if ((!req) || (!res) || !(req.body)) {
+        if ((!req) || (!res) || !(req.body) || !(req.body.token)) {
+            res.status(401).end();
             return callback({success: false});
         }
         var body = req.body,
             token = body.token;
-        console.log(body);
         var token_validate = this.test_token(token, req.clientIp);
         if (!token_validate.success) {
             res.status(401).end();

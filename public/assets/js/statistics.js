@@ -147,7 +147,6 @@ const draw_category_chart = function () {
                 value: stat_result.categories[category]
             });
         }
-        console.log(chart_data);
         $('#categories-chart').html('');
         new Morris.Donut({
             element: 'categories-chart',
@@ -251,6 +250,10 @@ $(document).ready(function () {
         format: 'yyyy-mm-dd'
     });
     $('#end').datepicker('setDate', date_to_string(end));
+
+    $('#categories-panel').resize(function() {
+        $('#results-panel').height($('#categories-panel').height());
+    });
     get_data();
 });
 //----------------------------------------------------------------------------//
