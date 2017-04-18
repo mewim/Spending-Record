@@ -4,6 +4,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Statistics</title>
+    <!-- jQuery 3 -->
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
     <!-- Material Design fonts -->
     <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Roboto:300,400,500,700">
     <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/icon?family=Material+Icons">
@@ -19,6 +21,15 @@
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <!-- AngularJS -->
     <script src="https://code.angularjs.org/1.6.4/angular.min.js"></script>
+    <!-- bootstrap-datepicker-->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/css/bootstrap-datepicker.min.css"
+          rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/js/bootstrap-datepicker.min.js"></script>
+    <!-- morris.js-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.min.js"></script>
+
     <!-- User Javascript and CSS -->
     <link href="/assets/css/background.css" rel="stylesheet">
     <link href="/assets/css/sidebar.css" rel="stylesheet">
@@ -35,57 +46,99 @@
 </nav>
 <!-- container-fluid -->
 <div class="container-fluid" style="padding-top: 50px;">
-<div ng-app="" class="col-sm-3 col-md-2 panel panel-default sidebar" ng-include="'/_include/sidebar.html'">
-</div>
+    <div ng-app="" class="col-sm-3 col-md-2 panel panel-default sidebar" ng-include="'/_include/sidebar.html'">
+    </div>
     <div class="col-sm-9 col-md-10 pull-right" id="pull-right-wrapper">
         <!-- content-wrapper -->
         <div class="col-lg-12" style="padding-top: 30px;" id="content-wrapper">
-            <!-- Password panel -->
-            <div class="panel panel-default" ng-controller="PasswordController">
+            <!-- Date panel -->
+            <div class="panel panel-default">
                 <div class="panel-heading">
-                    <i class="fa fa-key"></i> Password
+                    <i class="fa fa-calendar"></i> Date range
                 </div>
                 <div class="panel-body">
-                    <div ng-hide="password != password_rpt || (password.length > 0 && password.length < 8) || err_messages.length > 0">
+                    <div id="message">
                         <div class="alert alert-info">
-                            <i class="fa fa-info-circle fa-fw"></i> {{message}}
-                        </div>
-                    </div>
-
-                    <div ng-show="password != password_rpt || (password.length > 0 && password.length < 8) || err_messages.length > 0">
-                        <div class="alert alert-danger">
-                            <div ng-show="password.length > 0 &&  password.length < 8">
-                                <i class="fa fa-exclamation-circle"></i> The minimum length for your password is 8
-                                characters.
-                            </div>
-                            <div ng-show="password != password_rpt">
-                                <i class="fa fa-exclamation-circle"></i> Your password and confirmation password do not
-                                match.
-                            </div>
-                            <div ng-repeat="err in err_messages">
-                                <i class="fa fa-exclamation-circle"></i>
-                                {{err}}
-                            </div>
+                            <i class="fa fa-info-circle fa-fw"></i> Please specify a date range to run statistics.
                         </div>
                     </div>
                     <div class="col-lg-6">
                         <div class="form-group">
-                            <label for="password">Password</label>
-                            <input ng-model="password" id="password" class="form-control" type="password"
-                                   placeholder="Enter your password" name="password" autofocus="">
-                            <input ng-model="password_rpt" id="password_rpt" class="form-control" type="password"
-                                   placeholder="Confirm your password" name="password_rpt" autofocus="">
-                            <small id="passwordHelp" class="form-text text-muted">At least 8 characters.
+                            <input id="start" class="form-control dpicker" placeholder="Start Date">
+                            </small>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <input id="end" class="form-control dpicker" placeholder="End Date">
                             </small>
                         </div>
                     </div>
                     <div class="col-lg-12">
-                        <button type="button" class="btn btn-success" ng-click="submit()">Submit</button>
-                        <button type="button" class="btn btn-danger" ng-click="reset()">Reset Form</button>
+                        <button type="button" class="btn btn-success" onclick="get_data()">OK</button>
                     </div>
                 </div>
             </div>
-            <!-- End Password panel -->
+            <!-- End Date panel -->
+
+            <!-- Daily panel -->
+            <div class="panel panel-default" id="daily-panel" style="display: none">
+                <div class="panel-heading">
+                    <i class="fa fa-line-chart"></i> Daily
+                </div>
+                <div class="panel-body">
+                    <div id="daily-chart" style="height: 100%;"></div>
+                </div>
+            </div>
+            <!-- End Date panel -->
+
+            <div class="row">
+                <div class="col-lg-6">
+                    <!-- Categories panel -->
+                    <div class="panel panel-default" id="categories-panel" style="display: none">
+                        <div class="panel-heading">
+                            <i class="fa fa-list-alt"></i> Categories
+                        </div>
+                        <div class="panel-body">
+                            <div id="categories-chart" style="height: 100%;"></div>
+                        </div>
+                    </div>
+                    <!-- End Categories panel -->
+                </div>
+                <div class="col-lg-6" style="height: 100%;">
+                    <!-- Results panel -->
+                    <div class="panel panel-default" id="results-panel" style="display: none">
+                        <div class="panel-heading">
+                            <i class="fa fa-check-square-o"></i> Results
+                        </div>
+                        <div class="panel-body">
+                            <table class="table table-hover table-bordered">
+                                <tbody>
+                                <tr>
+                                    <td class="col-md-3">Total Spending</td>
+                                    <td class="col-md-3" id="total-spending"></td>
+                                </tr>
+                                <tr>
+                                    <td class="col-md-3">Average Daily Spending</td>
+                                    <td class="col-md-3" id="avg-spending"></td>
+                                </tr>
+                                <tr>
+                                    <td class="col-md-3">Most Expensive Item</td>
+                                    <td class="col-md-3" id="most-expensive"></td>
+                                </tr>
+                                <tr>
+                                    <td class="col-md-3">Cheapest Item</td>
+                                    <td class="col-md-3" id="cheapest"></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <!-- End Results panel -->
+                </div>
+            </div>
+
+
         </div>
         <!-- End content-wrapper -->
     </div>

@@ -55,7 +55,7 @@ const remove_record = function (_id, row) {
  * Handles button onclick events
  */
 const handle_buttons_click = function () {
-    $('.remove').click(function () {
+    $('#records tbody').on('click', 'i', function () {
         var row = records_table.row($(this).parents('tr'));
         var data = row.data();
         var _id = data[5];

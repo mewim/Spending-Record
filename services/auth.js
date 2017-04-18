@@ -131,7 +131,7 @@ module.exports = {
         }
         var body = req.body,
             // Username and password entered by user
-            username = body.username,
+            username = body.username.toLowerCase(),
             password = body.password;
         User.findOne({username: username}, function (error, user) {
             if (error) {
