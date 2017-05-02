@@ -57,29 +57,6 @@ router.put('/', function (req, res) {
         if (!auth.success) {
             return;
         }
-        var body = req.body;
-        if (body.password) {
-            var password_validate = UserService.validate_password(body.password, body.password);
-            if (password_validate.length > 0) {
-                return res.status(400).send({
-                    success: false,
-                    messages: password_validate
-                });
-            }
-            return AuthService.encrypt_password(body.password, function (encrypted) {
-                if (!encrypted) {
-                    return res.status(500).send(SERVER_ERROR);
-                }
-                auth.user.password = encrypted;
-                auth.user.save(function (err) {
-                    if (err) {
-                        return res.status(500).send(SERVER_ERROR);
-                    }
-                    return res.status(200).send({success: true});
-                });
-            });
-        }
-
         var user_validate = UserService.validate_user_info(req.body);
         User.findOne({username: user_validate.user ? user_validate.user.username : ''}, function (err, exist_user) {
             if (err) {

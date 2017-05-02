@@ -54,7 +54,8 @@ module.exports = {
         var info = {
             user_id: user_id,
             ip: ip,
-            expire_date: expire_date
+            expire_date: expire_date,
+            timestamp: new Date()
         };
         return jwt.encode(info, TOKEN_SECRET);
     },
@@ -82,7 +83,8 @@ module.exports = {
         else {
             return {
                 success: true,
-                user_id: info.user_id
+                user_id: info.user_id,
+                timestamp: new Date(info.timestamp)
             }
         }
     },
@@ -109,7 +111,7 @@ module.exports = {
             return callback({success: false});
         }
         User.findOne({_id: token_validate.user_id}, function (error, user) {
-            if (error || !user) {
+            if (error || !user || user.token_timestamp > token_validate.timestamp) {
                 res.status(401).end();
                 return callback({success: false});
             }
@@ -131,7 +133,7 @@ module.exports = {
         }
         var body = req.body,
             // Username and password entered by user
-            username = body.username.toLowerCase(),
+            username = body.username ? body.username.toLowerCase() : '',
             password = body.password;
         User.findOne({username: username}, function (error, user) {
             if (error) {

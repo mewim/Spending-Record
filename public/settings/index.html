@@ -105,53 +105,6 @@
                 </div>
             </div>
             <!-- End User Information panel -->
-            
-            <!-- Password panel -->
-            <div class="panel panel-default" ng-controller="PasswordController">
-                <div class="panel-heading">
-                    <i class="fa fa-key"></i> Password
-                </div>
-                <div class="panel-body">
-                    <div ng-hide="password != password_rpt || (password.length > 0 && password.length < 8) || err_messages.length > 0">
-                        <div class="alert alert-info">
-                            <i class="fa fa-info-circle fa-fw"></i> {{message}}
-                        </div>
-                    </div>
-
-                    <div ng-show="password != password_rpt || (password.length > 0 && password.length < 8) || err_messages.length > 0">
-                        <div class="alert alert-danger">
-                            <div ng-show="password.length > 0 &&  password.length < 8">
-                                <i class="fa fa-exclamation-circle"></i> The minimum length for your password is 8
-                                characters.
-                            </div>
-                            <div ng-show="password != password_rpt">
-                                <i class="fa fa-exclamation-circle"></i> Your password and confirmation password do not
-                                match.
-                            </div>
-                            <div ng-repeat="err in err_messages">
-                                <i class="fa fa-exclamation-circle"></i>
-                                {{err}}
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-6">
-                        <div class="form-group">
-                            <label for="password">Password</label>
-                            <input ng-model="password" id="password" class="form-control" type="password"
-                                   placeholder="Enter your password" name="password" autofocus="">
-                            <input ng-model="password_rpt" id="password_rpt" class="form-control" type="password"
-                                   placeholder="Confirm your password" name="password_rpt" autofocus="">
-                            <small id="passwordHelp" class="form-text text-muted">At least 8 characters.
-                            </small>
-                        </div>
-                    </div>
-                    <div class="col-lg-12">
-                        <button type="button" class="btn btn-success" ng-click="submit()">Submit</button>
-                        <button type="button" class="btn btn-danger" ng-click="reset()">Reset Form</button>
-                    </div>
-                </div>
-            </div>
-            <!-- End Password panel -->
 
             <!-- Categories panel -->
             <div class="panel panel-default" ng-controller="CategoryController">

@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en" style="height: 100%">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings</title>
+    <!-- Material Design fonts -->
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Roboto:300,400,500,700">
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/icon?family=Material+Icons">
+    <!-- AngularJS -->
+    <script src="https://code.angularjs.org/1.6.4/angular.min.js"></script>
+    <script src="https://code.angularjs.org/1.6.4/angular-animate.min.js"></script>
+    <script src="https://code.angularjs.org/1.6.4/angular-touch.min.js"></script>
+
+    <!-- Bootstrap 3 -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/2.5.0/ui-bootstrap-tpls.min.js"></script>
+
+    <!-- Bootstrap Material Design -->
+    <link rel="stylesheet" type="text/css"
+          href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-material-design/0.5.10/css/bootstrap-material-design.css">
+    <link rel="stylesheet" type="text/css"
+          href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-material-design/0.5.10/css/ripples.min.css">
+    <!-- Font Awesome Icons -->
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <!-- User Javascript and CSS -->
+    <link href="/assets/css/background.css" rel="stylesheet">
+    <link href="/assets/css/sidebar.css" rel="stylesheet">
+    <script src="/assets/js/security.js"></script>
+</head>
+
+<body ng-app="Security">
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <!-- Header -->
+    <div class="navbar-header">
+        <a class="navbar-brand" href="/" style=" height: 50px; padding: 10px 15px;">Spending Record</a>
+    </div>
+    <!-- End Header -->
+</nav>
+
+<!-- container-fluid -->
+<div class="container-fluid" style="padding-top: 50px;">
+    <div class="col-sm-3 col-md-2 panel panel-default sidebar" ng-include="'/_include/sidebar.html'"></div>
+    <div class="col-sm-9 col-md-10 pull-right" id="pull-right-wrapper">
+        <!-- content-wrapper -->
+        <div class="col-lg-12" style="padding-top: 30px;" id="content-wrapper" ng-controller="SecurityController">
+            <!-- Password Verify panel -->
+            <div class="panel panel-default" ng-hide="password.length > 0">
+                <div class="panel-heading">
+                    <i class="fa fa-exclamation-triangle"></i> Re-enter Password
+                </div>
+                <div class="panel-body">
+                    <div id="info" ng-hide="reenter_err_messages.length > 0">
+                        <div class="alert alert-info">
+                            <i class="fa fa-info-circle fa-fw"></i> {{reenter_message}}
+                        </div>
+                    </div>
+                    <div id="error" ng-show="reenter_err_messages.length > 0">
+                        <div class="alert alert-danger">
+                            <div ng-repeat="err in reenter_err_messages"><i class="fa fa-exclamation-circle"></i>
+                                {{err}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <input ng-model="password_input" class="form-control" placeholder="Password"
+                                   type="password">
+                        </div>
+                    </div>
+                    <div class="col-lg-12">
+                        <button type="button" class="btn btn-success" ng-click="verify_password()">Continue</button>
+                    </div>
+                </div>
+            </div>
+            <!-- End Password Verify panel -->
+
+            <!-- New Password panel -->
+            <div class="panel panel-default" ng-show="password.length > 0">
+                <div class="panel-heading">
+                    <i class="fa fa-lock"></i> Change Password
+                </div>
+                <div class="panel-body">
+                    <div ng-hide="new_password != new_password_rpt || (new_password.length > 0 && new_password.length < 8) || new_password_err_messages.length > 0">
+                        <div class="alert alert-info">
+                            <i class="fa fa-info-circle fa-fw"></i> {{new_password_message}}
+                        </div>
+                    </div>
+                    <div ng-show="new_password != new_password_rpt || (new_password.length > 0 && new_password.length < 8) || new_password_err_messages.length > 0">
+                        <div class="alert alert-danger">
+                            <div ng-show="new_password.length > 0 && new_password.length < 8">
+                                <i class="fa fa-exclamation-circle"></i> The minimum length for your password is 8
+                                characters.
+                            </div>
+                            <div ng-show="new_password != new_password_rpt">
+                                <i class="fa fa-exclamation-circle"></i> Your password and confirmation password do not
+                                match.
+                            </div>
+                            <div ng-repeat="err in new_password_err_messages">
+                                <i class="fa fa-exclamation-circle"></i>
+                                {{err}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <input ng-model="new_password" class="form-control" type="password"
+                                   placeholder="Enter your password" name="password" autofocus="">
+                            <input ng-model="new_password_rpt" class="form-control" type="password"
+                                   placeholder="Confirm your password" name="password_rpt" autofocus="">
+                            <small class="form-text text-muted">At least 8 characters.
+                            </small>
+                        </div>
+                    </div>
+                    <div class="col-lg-12">
+                        <button type="button" class="btn btn-success" ng-click="change_password()">Change</button>
+                        <button type="button" class="btn btn-danger" ng-click="reset_new_password()">Reset Form</button>
+                    </div>
+                </div>
+            </div>
+            <!-- End Password panel -->
+
+            <!-- Deauthorize panel -->
+            <div class="panel panel-default" ng-show="password.length > 0">
+                <div class="panel-heading">
+                    <i class="fa fa-shield"></i> Deauthorize Other Devices
+                </div>
+                <div class="panel-body">
+                    <div ng-hide="deauthorize_err_messages.length > 0">
+                        <div class="alert alert-info">
+                            <i class="fa fa-info-circle fa-fw"></i> {{deauthorize_message}}
+                        </div>
+                    </div>
+
+                    <div ng-show="deauthorize_err_messages.length > 0">
+                        <div class="alert alert-danger">
+                            <div ng-repeat="err in deauthorize_err_messages"><i class="fa fa-exclamation-circle"></i>
+                                {{err}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-12">
+                        <button type="button" class="btn btn-danger" ng-click="deauthorize()">Deauthorize Other Devices</button>
+                    </div>
+                </div>
+            </div>
+            <!-- End Password panel -->
+        </div>
+        <!-- End content-wrapper -->
+    </div>
+    <!-- End container-fluid -->
+</body>
+</html>

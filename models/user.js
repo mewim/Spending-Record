@@ -20,7 +20,9 @@ var user = new Schema({
     _records: [{
         type: Schema.ObjectId,
         ref: 'Record'
-    }]
+    }],
+    token_timestamp: {type: Date, required: true, default: Date.now},
+    budget: {type: Number, required: true, default:1000.0}
 });
 
 module.exports = mongoose.model('User', user);
