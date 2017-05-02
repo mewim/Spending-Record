@@ -60,7 +60,7 @@ const date_to_string = function (date) {
  * @param {Number} month
  */
 const days_in_a_month = function (year, month) {
-    return new Date(year, month + 1, 0).getDate();
+    return new Date(year, month, 0).getDate();
 };
 
 /**
@@ -136,7 +136,7 @@ function get_user() {
                 window.location = '/signout'
             }
             else {
-                $('#message').html(['There is a network error, please try again later.']);
+                $('#message').html(red_alert(['There is a network error, please try again later.']));
             }
         }
     });
@@ -168,7 +168,7 @@ function get_records() {
                 $('#message').html(red_alert(xhr.responseJSON.messages));
             }
             else {
-                $('#message').html(['There is a network error, please try again later.']);
+                $('#message').html(red_alert(['There is a network error, please try again later.']));
             }
         }
     });
@@ -192,7 +192,7 @@ function get_categories() {
             if (xhr.status == 401) {
                 window.location = '/signout';
             }
-            $('#message').html(['There is a network error, please try again later.']);
+            $('#message').html(red_alert(['There is a network error, please try again later.']));
         }
     });
 }

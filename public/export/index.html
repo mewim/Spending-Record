@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en" style="height: 100%">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Export</title>
+    <!-- jQuery 3 -->
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <!-- Material Design fonts -->
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Roboto:300,400,500,700">
+    <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/icon?family=Material+Icons">
+    <!-- Bootstrap 3 -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <!-- Bootstrap Material Design -->
+    <link rel="stylesheet" type="text/css"
+          href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-material-design/0.5.10/css/bootstrap-material-design.css">
+    <link rel="stylesheet" type="text/css"
+          href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-material-design/0.5.10/css/ripples.min.css">
+    <!-- Font Awesome Icons -->
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <!-- AngularJS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+    <!-- bootstrap-datepicker-->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/css/bootstrap-datepicker.min.css"
+          rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/js/bootstrap-datepicker.min.js"></script>
+    <!-- morris.js-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.min.js"></script>
+
+    <!-- User CSS -->
+    <link href="/assets/css/background.css" rel="stylesheet">
+    <link href="/assets/css/sidebar.css" rel="stylesheet">
+</head>
+
+<body>
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <!-- Header -->
+    <div class="navbar-header">
+        <a class="navbar-brand" href="/" style=" height: 50px; padding: 10px 15px;">Spending Record</a>
+    </div>
+    <!-- End Header -->
+</nav>
+<!-- container-fluid -->
+<div class="container-fluid" style="padding-top: 50px;">
+    <div ng-app="" class="col-sm-3 col-md-2 panel panel-default sidebar" ng-include="'/_include/sidebar.html'">
+    </div>
+    <div class="col-sm-9 col-md-10 pull-right" id="pull-right-wrapper">
+        <!-- content-wrapper -->
+        <div class="col-lg-12" style="padding-top: 30px;" id="content-wrapper">
+            <!-- Date panel -->
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <i class="fa fa-wrench"></i> Export Configurations
+                </div>
+                <div class="panel-body">
+                    <div id="message">
+                        <div class="alert alert-info">
+                            <i class="fa fa-info-circle fa-fw"></i> Please specify a date range and format to export
+                            data.
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label>Start *</label>
+                                <input id="start" class="form-control dpicker" placeholder="Start Date">
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label>End *</label>
+                                <input id="end" class="form-control dpicker" placeholder="End Date">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label>Format *</label>
+                                <select class="form-control" id="format_select">
+                                    <option value="json">JSON</option>
+                                    <option value="csv">CSV</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-12">
+                        <button type="button" class="btn btn-success" onclick="get_data()">OK</button>
+                    </div>
+                </div>
+            </div>
+            <!-- End Date panel -->
+        </div>
+        <!-- End content-wrapper -->
+    </div>
+</div>
+<!-- End container-fluid -->
+
+<!-- User Javascript -->
+<script src="/assets/js/export.js"></script>
+</body>
+</html>

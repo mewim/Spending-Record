@@ -9,12 +9,10 @@ angular.module('Record', ['google.places'])
           require : 'ngModel',
           link: function(scope, element, attrs, ngModelCtrl) {
             $(element).datepicker({
-              dateFormat:'dd-MM-yyyy',
-            language: 'en',
-            pickTime: false,
-            startDate: '01-11-2013',      // set a minimum date
-            endDate: '01-11-2030'          // set a maximum date
+                todayBtn: "linked",
+                format: 'yyyy-mm-dd'
             }).on('changeDate', function(e) {
+                console.log(e);
               ngModelCtrl.$setViewValue(e.date);
               scope.$apply();
             });
@@ -29,18 +27,21 @@ angular.module('Record', ['google.places'])
     $scope.submit = function () {
         $scope.err_messages = [];
         $scope.message = 'Submitting...';
-
+        var data = {
+            category: ($scope.record.category == 'dummy') ? null : $scope.categories[$scope.record.category],
+            amount: $scope.record.amount,
+            description: $scope.record.description,
+            token: localStorage.getItem("token"),
+            location: $scope.record.location ? $scope.record.location.name : null
+        };
+        if($scope.record.date && $scope.record.date.length > 0){
+            data.date = $scope.record.date;
+        }
+        console.log(data);
         var req = {
             method: 'POST',
             url: '/api/record/',
-            data: {
-                category: ($scope.record.category == 'dummy') ? null : $scope.categories[$scope.record.category],
-                date: $scope.record.date,
-                amount: $scope.record.amount,
-                description: $scope.record.description,
-                token: localStorage.getItem("token"),
-                location: $scope.record.location ? $scope.record.location.name : null
-            }
+            data: data
         };
         $http(req).then(
             function (res) {
@@ -71,8 +72,7 @@ angular.module('Record', ['google.places'])
         $scope.err_messages = [];
         $scope.message = 'Please enter your record.';
         $scope.record = {
-            category: 'dummy',
-            date: new Date().toISOString().slice(0, 10)
+            category: 'dummy'
         };
     };
 
@@ -97,5 +97,6 @@ angular.module('Record', ['google.places'])
                 alert("Sorry. Bad connection. Please try again.");
             }
         });
+    $scope.datepicker_date = new Date();
     $scope.reset();
 });
