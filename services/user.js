@@ -49,8 +49,12 @@ module.exports = {
             result.messages.push('Please enter your city.');
         }
         user_info.zipcode = parseInt(user_info.zipcode);
-        if (isNaN(user_info.zipcode)) {
+        if (isNaN(user_info.zipcode) || user_info.zipcode < 0) {
             result.messages.push('Please enter a valid zip code.');
+        }
+        user_info.budget = parseFloat(user_info.budget);
+        if (isNaN(user_info.budget) || user_info.budget < 0) {
+            result.messages.push('Please enter a valid budget.');
         }
         result.success = result.messages.length == 0;
         result.user = user_info;

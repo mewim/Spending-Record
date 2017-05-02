@@ -18,7 +18,7 @@
     <!-- Font Awesome Icons -->
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <!-- AngularJS -->
-    <script src="https://code.angularjs.org/1.6.4/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
 </head>
 <body>
 
@@ -88,6 +88,11 @@
                             <input ng-model="user.city" id="city" class="form-control" placeholder="Enter your city" name="city">
                             <input ng-model="user.state" id="state" class="form-control" placeholder="Enter your state/province" name="state">
                             <input ng-model="user.zipcode" id="zipcode" class="form-control" placeholder="Enter your zip code" name="zipcode">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="budget">Budget ($)</label>
+                            <input ng-model="user.budget" id="budget" class="form-control" placeholder="Enter your monthly budget" name="budget">
                         </div>
                         <button class="btn btn-lg btn-success btn-block" ng-click="submit()">Submit</button>
                     </fieldset>

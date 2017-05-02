@@ -97,7 +97,8 @@ router.post('/get', function (req, res) {
             lastname: user.lastname,
             state: user.state,
             city: user.city,
-            zipcode: user.zipcode
+            zipcode: user.zipcode,
+            budget: user.budget
         });
     });
 });

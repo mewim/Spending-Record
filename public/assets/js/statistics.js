@@ -8,6 +8,7 @@
 var records = null;
 var categories = null;
 var stat_result = null;
+var user = null;
 var end = new Date();
 end.setHours(0);
 var start = new Date(end).setMonth(end.getMonth() - 1);
@@ -51,6 +52,15 @@ const red_alert = function (messages) {
  */
 const date_to_string = function (date) {
     return new Date(date).toISOString().slice(0, 10)
+};
+
+/**
+ * Get number of days in current month
+ * @param {Number} year
+ * @param {Number} month
+ */
+const days_in_a_month = function (year, month) {
+    return new Date(year, month + 1, 0).getDate();
 };
 
 /**
@@ -102,7 +112,90 @@ const get_statistics_result = function () {
     stat_result.average = stat_result.total / Object.values(stat_result.daily).length;
 };
 
+/**
+ * Fetch user information from server, and draw the result
+ */
+function get_user() {
+    $.ajax({
+        url: '/api/user/get',
+        type: 'POST',
+        data: JSON.stringify({
+            token: localStorage.getItem('token')
+        }),
+        contentType: "application/json; charset=utf-8",
+        success: function (res2) {
+            user = res2;
+            get_statistics_result();
+            draw_daily_chart(document.getElementById('draw_budget_checkbox').checked);
+            draw_category_chart();
+            draw_results();
+            $('#message').html(blue_alert('Please specify a date range to run statistics.'));
+        },
+        error: function (xhr, status, error) {
+            if (xhr.status == 401) {
+                window.location = '/signout'
+            }
+            else {
+                $('#message').html(['There is a network error, please try again later.']);
+            }
+        }
+    });
+}
 
+/**
+ * Fetch records information from server
+ */
+function get_records() {
+    $.ajax({
+        url: '/api/record/get_range',
+        type: 'POST',
+        data: JSON.stringify({
+            token: localStorage.getItem('token'),
+            start: new Date($('#start').val()),
+            end: new Date($('#end').val())
+        }),
+        contentType: "application/json; charset=utf-8",
+        success: function (res1) {
+            records = res1.records;
+            // Load user
+            get_user();
+        },
+        error: function (xhr, status, error) {
+            if (xhr.status == 401) {
+                window.location = '/signout'
+            }
+            if (xhr.status == 400) {
+                $('#message').html(red_alert(xhr.responseJSON.messages));
+            }
+            else {
+                $('#message').html(['There is a network error, please try again later.']);
+            }
+        }
+    });
+}
+
+/**
+ * Fetch categories information from server
+ */
+function get_categories() {
+    $.ajax({
+        url: '/api/category/get',
+        type: 'POST',
+        data: JSON.stringify({token: localStorage.getItem('token')}),
+        contentType: "application/json; charset=utf-8",
+        success: function (res0) {
+            categories = res0;
+            // Load records
+            get_records();
+        },
+        error: function (xhr, status, error) {
+            if (xhr.status == 401) {
+                window.location = '/signout';
+            }
+            $('#message').html(['There is a network error, please try again later.']);
+        }
+    });
+}
 //----------------------------------------------------------------------------//
 
 //----------------------------------------------------------------------------//
@@ -110,14 +203,19 @@ const get_statistics_result = function () {
 //----------------------------------------------------------------------------//
 /**
  * Draw daily spending chart
+ * @param {Boolean} budget - whether to draw the daily budget line
  */
-const draw_daily_chart = function () {
+const draw_daily_chart = function (budget) {
     $('#daily-panel').fadeIn('slow', function(){
         var chart_data = [];
         for (var date in stat_result.daily) {
             chart_data.push({
                 date: date,
-                spent: stat_result.daily[date]
+                spent: stat_result.daily[date],
+                budget: user.budget / days_in_a_month(
+                    parseInt(date.substring(0,4)),
+                    parseInt(date.substring(5,7))
+                )
             });
         }
         $('#daily-chart').html('');
@@ -125,11 +223,11 @@ const draw_daily_chart = function () {
             element: 'daily-chart',
             data: chart_data,
             xkey: 'date',
-            ykeys: ['spent'],
-            labels: ['Money Spent'],
+            ykeys: budget ? ['spent', 'budget'] : ['spent'],
+            labels: budget ? ['Money Spent', 'Daily Budget'] : ['Money Spent'],
             resize: true,
             yLabelFormat: function (y) {
-                return '$' + y
+                return '$' + y.toFixed(2);
             }
         });
     });
@@ -188,51 +286,7 @@ const get_data = function () {
     end = new Date($('#end').val());
     $('#message').html(blue_alert('Loading...'));
     // Load categories first
-    $.ajax({
-        url: '/api/category/get',
-        type: 'POST',
-        data: JSON.stringify({token: localStorage.getItem('token')}),
-        contentType: "application/json; charset=utf-8",
-        success: function (res0) {
-            categories = res0;
-            // Load records
-            $.ajax({
-                url: '/api/record/get_range',
-                type: 'POST',
-                data: JSON.stringify({
-                    token: localStorage.getItem('token'),
-                    start: new Date($('#start').val()),
-                    end: new Date($('#end').val())
-                }),
-                contentType: "application/json; charset=utf-8",
-                success: function (res1) {
-                    records = res1.records;
-                    get_statistics_result();
-                    draw_daily_chart();
-                    draw_category_chart();
-                    draw_results();
-                    $('#message').html(blue_alert('Please specify a date range to run statistics.'));
-                },
-                error: function (xhr, status, error) {
-                    if (xhr.status == 401) {
-                        window.location = '/signout'
-                    }
-                    if (xhr.status == 400) {
-                        $('#message').html(red_alert(xhr.responseJSON.messages));
-                    }
-                    else {
-                        $('#message').html(['There is a network error, please try again later.']);
-                    }
-                }
-            });
-        },
-        error: function (xhr, status, error) {
-            if (xhr.status == 401) {
-                window.location = '/signout';
-            }
-            $('#message').html(['There is a network error, please try again later.']);
-        }
-    });
+    get_categories();
 };
 //----------------------------------------------------------------------------//
 

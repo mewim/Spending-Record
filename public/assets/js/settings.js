@@ -70,61 +70,6 @@ app.controller('UserInfoController', function ($scope, $http) {
     $scope.reset();
 });
 
-/*
- * Password Controller
- * Handles manipulation for password
- */
-app.controller('PasswordController', function ($scope, $http) {
-    /*
-     * Submit a record to server.
-     * Callback function for submit button.
-     */
-    $scope.submit = function () {
-        if ($scope.password != $scope.password_rpt || ($scope.password.length < 8)) {
-            return;
-        }
-        $scope.err_messages = [];
-        $scope.message = 'Submitting...';
-        $http({
-            method: 'PUT',
-            url: '/api/user/',
-            data: {
-                password: $scope.password,
-                token: localStorage.getItem("token")
-            }
-        }).then(
-            function (res) {
-                // success callback
-                $scope.message = 'Your password is successfully changed. Redirecting to login page in 3 seconds...';
-                setTimeout(function () {
-                    window.location = '/signout';
-                }, 3000);
-            },
-            function (res) {
-                // failure callback
-                if (res.status == 401) {
-                    window.location = '/signout'
-                }
-                else if (res.status == 400) {
-                    $scope.err_messages = res.data.messages;
-                }
-                else {
-                    $scope.err_messages = ["Sorry. Bad connection. Please try again."];
-                }
-            });
-    };
-
-    /*
-     * Reset form.
-     * Callback function for reset button.
-     */
-    $scope.reset = function () {
-        $scope.message = 'Change your password here.';
-        $scope.password = '';
-        $scope.password_rpt = '';
-    };
-    $scope.reset();
-});
 
 /*
  * Category Controller
