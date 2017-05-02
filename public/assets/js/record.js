@@ -35,7 +35,7 @@ angular.module('Record', ['google.places'])
             location: $scope.record.location ? $scope.record.location.name : null
         };
         if($scope.record.date && $scope.record.date.length > 0){
-            data.date = $scope.record.date;
+            data.date = new Date($scope.record.date);
         }
         console.log(data);
         var req = {
