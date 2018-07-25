@@ -26,12 +26,18 @@ router.post('/', function (req, res) {
         }
         Record.create(record_validate.record, function (err, new_record) {
             if (err) {
-                return res.status(500).send(SERVER_ERROR);
+                return res.status(500).send({
+                    success: false,
+                    messages: [err]
+                });
             }
             user._records.push(new_record._id);
             user.save(function (err1) {
                 if (err1) {
-                    return res.status(500).send(SERVER_ERROR);
+                    return res.status(500).send({
+                        success: false,
+                        messages: [err1]
+                    });                
                 }
                 return res.status(200).send({
                     success: true,
