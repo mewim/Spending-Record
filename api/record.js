@@ -31,7 +31,7 @@ router.post('/', function (req, res) {
                     messages: [err]
                 });
             }
-            user._records.push(new_record._id);
+            user._records = user._records.concat([new_record._id]);
             user.save(function (err1) {
                 if (err1) {
                     return res.status(500).send({
